@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lottery/screen/home_screen.dart';
+import 'package:lottery/screen/number_generation_screen.dart';
 import 'package:lottery/model/BottomNavigationBarModel.dart';
 
 class RootScreen extends StatefulWidget {
