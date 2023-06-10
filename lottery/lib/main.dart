@@ -5,8 +5,13 @@ import 'package:lottery/model/BottomNavigationBarModel.dart';
 import 'package:lottery/screen/number_generation_screen.dart';
 import 'package:lottery/screen/store_screen.dart';
 import 'package:lottery/screen/qr_code_screen.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  MobileAds.instance.initialize();
+
   List<BottomNavigationBarModel> itemList = [
     BottomNavigationBarModel(
       bar: const BottomNavigationBarItem(
@@ -36,6 +41,7 @@ void main() {
 
   runApp(
     MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: backgroundColor,
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(

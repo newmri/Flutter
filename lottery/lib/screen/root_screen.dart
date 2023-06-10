@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottery/screen/number_generation_screen.dart';
 import 'package:lottery/model/BottomNavigationBarModel.dart';
+import 'package:lottery/component/banner_ad_widget.dart';
 
 class RootScreen extends StatefulWidget {
   late List<BottomNavigationBarModel> itemList;
@@ -22,8 +23,7 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    controller =
-        TabController(length: itemList.length, vsync: this);
+    controller = TabController(length: itemList.length, vsync: this);
 
     controller.addListener(tabListener);
   }
@@ -40,11 +40,20 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: SafeArea(
         child: TabBarView(
           controller: controller,
           children: itemList.map((e) => e.widget).toList(),
+        ),
+      ),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        toolbarHeight: 50,
+        flexibleSpace: SafeArea(
+          child: BannerAdWidget(),
         ),
       ),
       bottomNavigationBar: renderBottomNavigation(),
@@ -53,12 +62,13 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
 
   BottomNavigationBar renderBottomNavigation() {
     return BottomNavigationBar(
-        currentIndex: controller.index,
-        onTap: (int index) {
-          setState(() {
-            controller.animateTo(index);
-          });
-        },
-        items: itemList.map((e) => e.bar).toList());
+      currentIndex: controller.index,
+      onTap: (int index) {
+        setState(() {
+          controller.animateTo(index);
+        });
+      },
+      items: itemList.map((e) => e.bar).toList(),
+    );
   }
 }

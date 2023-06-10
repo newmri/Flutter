@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class QRCodeScreen extends StatefulWidget {
   const QRCodeScreen({Key? key}) : super(key: key);
@@ -23,15 +24,20 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
 
   MobileScanner renderScanner() {
     return MobileScanner(
-      fit: BoxFit.contain,
+      fit: BoxFit.cover,
       onDetect: (capture) {
         final List<Barcode> barcodes = capture.barcodes;
         for (final barcode in barcodes) {
           if (BarcodeType.url != barcode.type) {
+            renderErrorToast();
             return;
           }
 
           String url = barcode.rawValue!;
+          if (false == url.contains("lottery.co.kr/")) {
+            renderErrorToast();
+            return;
+          }
 
           setState(() {
             openUrl(url);
@@ -44,11 +50,23 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
 
   Align renderText() {
     return const Align(
-      alignment: Alignment.bottomCenter,
+      alignment: Alignment.topCenter,
       child: SizedBox(
-        height: 70,
-        child: Text("QRCode를 스캔 해주세요."),
+        height: 50,
+        child: Text(
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+            "QR 코드를 스캔 해주세요."),
       ),
+    );
+  }
+
+  void renderErrorToast() {
+    Fluttertoast.showToast(
+      msg: "잘못된 QR 코드 입니다.",
+      toastLength: Toast.LENGTH_SHORT,
     );
   }
 
