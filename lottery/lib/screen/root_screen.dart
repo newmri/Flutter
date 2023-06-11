@@ -52,7 +52,7 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         toolbarHeight: 50,
-        flexibleSpace: SafeArea(
+        flexibleSpace: const SafeArea(
           child: BannerAdWidget(),
         ),
       ),
