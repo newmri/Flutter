@@ -5,6 +5,8 @@ import 'package:lottery/model/BottomNavigationBarModel.dart';
 import 'package:lottery/screen/number_generation_screen.dart';
 import 'package:lottery/screen/qr_code_screen.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:lottery/provider/number_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +20,12 @@ void main() async {
             Icons.games_outlined,
           ),
           label: '번호 생성'),
-      widget: const NumberGenerationScreen(),
+      widget: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => NumberProvider()),
+        ],
+        child: NumberGenerationScreen(),
+      ),
     ),
     BottomNavigationBarModel(
       bar: const BottomNavigationBarItem(

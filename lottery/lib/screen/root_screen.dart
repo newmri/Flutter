@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lottery/screen/number_generation_screen.dart';
 import 'package:lottery/model/BottomNavigationBarModel.dart';
 import 'package:lottery/component/banner_ad_widget.dart';
 
@@ -40,7 +39,6 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: SafeArea(
         child: TabBarView(

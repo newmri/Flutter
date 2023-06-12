@@ -23,7 +23,6 @@ class NumberWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SizedBox(
-
         child: CircleAvatar(
           backgroundColor: color,
           child: Text(
