@@ -12,6 +12,10 @@ class NumberProvider extends ChangeNotifier {
     return 45;
   }
 
+  int get numberLen {
+    return _numberList.length;
+  }
+
   int get numberListMaxLen {
     return 5;
   }
@@ -30,26 +34,41 @@ class NumberProvider extends ChangeNotifier {
     return _numberList;
   }
 
-  void generateNumber() {
-    if(numberListMaxLen <= numberList.length) {
+  void generateNumber({int count = 1}) {
+
+    int remainedCount = numberListMaxLen - numberList.length;
+
+    if(0 >= remainedCount) {
       return;
     }
 
-    List<int> newNumberList = [];
+    count = min(count, remainedCount);
 
-    while (true) {
-      var number = Random().nextInt(numberMax) + 1;
+    for(int i = 0; i < count; ++i) {
+      List<int> newNumberList = [];
 
-      if (!newNumberList.contains(number)) {
-        newNumberList.add(number);
+      while (true) {
+        var number = Random().nextInt(numberMax) + 1;
+
+        if (!newNumberList.contains(number)) {
+          newNumberList.add(number);
+        }
+
+        if (newNumberList.length == numberMaxLen) {
+          break;
+        }
       }
 
-      if (newNumberList.length == numberMaxLen) {
-        break;
-      }
+      newNumberList.sort();
+
+      _numberList.add(newNumberList);
     }
 
-    _numberList.add(newNumberList);
+    notifyListeners();
+  }
+
+  void clearNumber(){
+    _numberList.clear();
 
     notifyListeners();
   }
