@@ -22,7 +22,12 @@ void main() async {
           label: '번호 생성'),
       widget: MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => NumberProvider()),
+          ChangeNotifierProvider(create: (context){
+            var provider = NumberProvider();
+            provider.init();
+            return provider;
+          }
+          ),
         ],
         child: NumberGenerationScreen(),
       ),

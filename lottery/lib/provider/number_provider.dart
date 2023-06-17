@@ -3,6 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+enum UseKind {
+  statics,
+  overGenerate,
+}
+
 class NumberProvider extends ChangeNotifier {
   int get numberMaxLen {
     return 6;
@@ -28,6 +33,52 @@ class NumberProvider extends ChangeNotifier {
     return 50.0;
   }
 
+  void init(){
+    for (var e in UseKind.values) {
+      _useList.add(false);
+    }
+
+    _turnList.add(DropdownMenuItem(value: 1, child: Text(1.toString())));
+  }
+  
+  final List<DropdownMenuItem> _turnList = [];
+
+  List<DropdownMenuItem> get turnList{
+    return _turnList;
+  }
+
+  int _minTurn = 1;
+  int _maxTurn = 1;
+
+  int get minTurn {
+    return _minTurn;
+  }
+
+  set minTurn(int value) {
+    _minTurn = value;
+    notifyListeners();
+  }
+
+  int get maxTurn {
+    return _maxTurn;
+  }
+
+  set maxTurn(int value) {
+    _maxTurn = value;
+    notifyListeners();
+  }
+
+  final List<bool> _useList = [];
+
+  bool getUse(UseKind kind) {
+    return _useList[kind.index];
+  }
+
+  void setUse(UseKind kind, bool value) {
+    _useList[kind.index] = value;
+    notifyListeners();
+  }
+
   final List<List<int>> _numberList = [];
 
   List<List<int>> get numberList {
@@ -39,7 +90,15 @@ class NumberProvider extends ChangeNotifier {
     int remainedCount = numberListMaxLen - numberList.length;
 
     if(0 >= remainedCount) {
-      return;
+      if(false == getUse(UseKind.overGenerate)) {
+        return;
+      }
+
+      for(int i = 0; i < count; ++i) {
+        _numberList.removeAt(0);
+      }
+
+      remainedCount = numberListMaxLen - numberList.length;
     }
 
     count = min(count, remainedCount);
