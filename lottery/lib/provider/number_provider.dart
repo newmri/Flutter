@@ -1,7 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:lottery/model/lottery_model.dart';
+import 'package:lottery/repository/lottery_repository.dart';
+
+
+int numberMaxLen = 6;
+int numberMax = 45;
 
 enum UseKind {
   statics,
@@ -9,13 +14,6 @@ enum UseKind {
 }
 
 class NumberProvider extends ChangeNotifier {
-  int get numberMaxLen {
-    return 6;
-  }
-
-  int get numberMax {
-    return 45;
-  }
 
   int get numberLen {
     return _numberList.length;
@@ -33,12 +31,25 @@ class NumberProvider extends ChangeNotifier {
     return 50.0;
   }
 
-  void init(){
+  late List<LotteryModel> modelList;
+
+  Future<void> init() async {
     for (var e in UseKind.values) {
       _useList.add(false);
     }
 
-    _turnList.add(DropdownMenuItem(value: 1, child: Text(1.toString())));
+    try{
+      modelList = await LotteryRepository.getModelList();
+    }
+    catch(e){
+      print(e);
+    }
+
+    maxTurn = modelList.length;
+
+    for(int i = 1; i <= modelList.length; ++i) {
+      _turnList.add(DropdownMenuItem(value: i, child: Text(i.toString())));
+    }
   }
   
   final List<DropdownMenuItem> _turnList = [];
