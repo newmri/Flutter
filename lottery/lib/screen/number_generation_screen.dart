@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:lottery/provider/number_provider.dart';
+import 'package:lottery/provider/number_config_provider.dart';
 import 'package:provider/provider.dart';
-
 import '../component/number_list_container.dart';
 
 class NumberGenerationScreen extends StatelessWidget {
+  late NumberConfigProvider numberConfigProvider;
   late NumberProvider numberProvider;
 
   NumberGenerationScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    numberConfigProvider = Provider.of<NumberConfigProvider>(context);
     numberProvider = Provider.of<NumberProvider>(context);
 
     return Scaffold(
@@ -32,9 +34,11 @@ class NumberGenerationScreen extends StatelessWidget {
                 '번호 덮어서 생성',
               ),
               Switch(
-                value: numberProvider.getUse(UseKind.overGenerate),
+                value: (1 ==
+                    numberConfigProvider.getValue(ConfigKind.overGenerate)),
                 onChanged: (value) {
-                  numberProvider.setUse(UseKind.overGenerate, value);
+                  numberConfigProvider.setValue(
+                      ConfigKind.overGenerate, value ? 1 : 0);
                 },
               ),
             ],
@@ -50,14 +54,15 @@ class NumberGenerationScreen extends StatelessWidget {
                 '통계 사용',
               ),
               Switch(
-                value: numberProvider.getUse(UseKind.statics),
+                value: (1 == numberConfigProvider.getValue(ConfigKind.statics)),
                 onChanged: (value) {
-                  numberProvider.setUse(UseKind.statics, value);
+                  numberConfigProvider.setValue(
+                      ConfigKind.statics, value ? 1 : 0);
                 },
               ),
             ],
           ),
-          numberProvider.getUse(UseKind.statics)
+          (1 == numberConfigProvider.getValue(ConfigKind.statics))
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -119,7 +124,10 @@ class NumberGenerationScreen extends StatelessWidget {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      numberProvider.generateNumber();
+                      numberProvider.generateNumber(
+                          overGenerate: (1 ==
+                              numberConfigProvider
+                                  .getValue(ConfigKind.overGenerate)));
                     },
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -132,7 +140,12 @@ class NumberGenerationScreen extends StatelessWidget {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      numberProvider.generateNumber(count: 5);
+                      numberProvider.generateNumber(
+                        overGenerate: (1 ==
+                            numberConfigProvider
+                                .getValue(ConfigKind.overGenerate)),
+                        count: 5,
+                      );
                     },
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(

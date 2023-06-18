@@ -5,6 +5,7 @@ import 'package:lottery/model/BottomNavigationBarModel.dart';
 import 'package:lottery/screen/number_generation_screen.dart';
 import 'package:lottery/screen/qr_code_screen.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:lottery/provider/number_config_provider.dart';
 import 'package:lottery/provider/number_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -22,6 +23,12 @@ void main() async {
           label: '번호 생성'),
       widget: MultiProvider(
         providers: [
+          ChangeNotifierProvider(create: (context){
+            var provider = NumberConfigProvider();
+            provider.init();
+            return provider;
+          }
+          ),
           ChangeNotifierProvider(create: (context){
             var provider = NumberProvider();
             provider.init();

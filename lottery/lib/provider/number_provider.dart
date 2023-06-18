@@ -4,14 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:lottery/model/lottery_model.dart';
 import 'package:lottery/repository/lottery_repository.dart';
 
-
 int numberMaxLen = 6;
 int numberMax = 45;
-
-enum UseKind {
-  statics,
-  overGenerate,
-}
 
 class NumberProvider extends ChangeNotifier {
 
@@ -34,10 +28,6 @@ class NumberProvider extends ChangeNotifier {
   late List<LotteryModel> modelList;
 
   Future<void> init() async {
-    for (var e in UseKind.values) {
-      _useList.add(false);
-    }
-
     try{
       modelList = await LotteryRepository.getModelList();
     }
@@ -79,29 +69,18 @@ class NumberProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  final List<bool> _useList = [];
-
-  bool getUse(UseKind kind) {
-    return _useList[kind.index];
-  }
-
-  void setUse(UseKind kind, bool value) {
-    _useList[kind.index] = value;
-    notifyListeners();
-  }
-
   final List<List<int>> _numberList = [];
 
   List<List<int>> get numberList {
     return _numberList;
   }
 
-  void generateNumber({int count = 1}) {
+  void generateNumber({required bool overGenerate, int count = 1}) {
 
     int remainedCount = numberListMaxLen - numberList.length;
 
     if(0 >= remainedCount) {
-      if(false == getUse(UseKind.overGenerate)) {
+      if(false == overGenerate) {
         return;
       }
 
