@@ -11,7 +11,7 @@ class RootScreen extends StatefulWidget {
   State<RootScreen> createState() => _RootScreenState(itemList: itemList);
 }
 
-class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
+class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin  {
   late List<BottomNavigationBarModel> itemList;
 
   late TabController controller;
