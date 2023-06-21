@@ -4,4 +4,5 @@ class LotteryModel{
   void addNumber(int number){
     numberList.add(number);
   }
+
 }

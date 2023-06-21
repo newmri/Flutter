@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:lottery/model/lottery_model.dart';
+import 'package:lottery/model/lottery_turn_model.dart';
 import 'package:lottery/repository/lottery_repository.dart';
 
 int numberMaxLen = 6;
@@ -25,7 +25,7 @@ class NumberProvider extends ChangeNotifier {
     return 50.0;
   }
 
-  late List<LotteryModel> modelList;
+  late List<LotteryTurnModel> modelList;
 
   Future<void> init() async {
     try{
@@ -34,6 +34,8 @@ class NumberProvider extends ChangeNotifier {
     catch(e){
       print(e);
     }
+
+    notifyListeners();
 
     maxTurn = modelList.length;
 
