@@ -16,6 +16,8 @@ class NumberConfigProvider extends ChangeNotifier {
 
     _configList = await _configDB.get();
 
+    notifyListeners();
+
     if (_configList.isNotEmpty) {
       return;
     }

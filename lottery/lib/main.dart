@@ -36,7 +36,7 @@ void main() async {
           }
           ),
         ],
-        child: NumberGenerationScreen(),
+        child: const NumberGenerationScreen(),
       ),
     ),
     BottomNavigationBarModel(
