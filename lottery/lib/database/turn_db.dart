@@ -7,7 +7,7 @@ import 'package:path/path.dart';
 import 'package:lottery/model/lottery_turn_model.dart';
 
 const String dbName = 'turn.db';
-const String tableName = 'info';
+const String tableName = 'winHistory';
 
 class TurnDB {
   static Database? _database;
@@ -28,7 +28,7 @@ class TurnDB {
       try {
         await Directory(dirname(path)).create(recursive: true);
       } catch (_) {}
-      ByteData data = await rootBundle.load(join("assets", dbName));
+      ByteData data = await rootBundle.load(join('assets', dbName));
       List<int> bytes =
           data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
       await File(path).writeAsBytes(bytes, flush: true);

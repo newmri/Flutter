@@ -3,11 +3,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:lottery/model/lottery_turn_model.dart';
 import 'package:lottery/repository/lottery_repository.dart';
+import 'package:lottery/database/turn_db.dart';
 
 int numberMaxLen = 6;
 int numberMax = 45;
 
 class NumberProvider extends ChangeNotifier {
+  final TurnDB _turnDB = TurnDB();
 
   int get numberLen {
     return _numberList.length;
@@ -25,11 +27,12 @@ class NumberProvider extends ChangeNotifier {
     return 50.0;
   }
 
-  late List<LotteryTurnModel> modelList;
+  late List<LotteryTurnModel> _modelList = [];
 
   Future<void> init() async {
     try{
-      modelList = await LotteryRepository.getModelList();
+      _modelList = await _turnDB.get();
+      //_modelList = await LotteryRepository.getModelList();
     }
     catch(e){
       print(e);
@@ -37,9 +40,9 @@ class NumberProvider extends ChangeNotifier {
 
     notifyListeners();
 
-    maxTurn = modelList.length;
+    maxTurn = _modelList.length;
 
-    for(int i = 1; i <= modelList.length; ++i) {
+    for(int i = 1; i <= _modelList.length; ++i) {
       _turnList.add(DropdownMenuItem(value: i, child: Text(i.toString())));
     }
   }
