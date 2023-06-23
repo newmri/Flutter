@@ -21,11 +21,18 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
 
   @override
   Widget build(BuildContext context) {
-    numberConfigProvider = Provider.of<NumberConfigProvider>(context);
     numberProvider = Provider.of<NumberProvider>(context);
+    numberConfigProvider = Provider.of<NumberConfigProvider>(context);
+
+    bool isOnLoading = numberProvider.isOnLoading();
+
+    if(false == isOnLoading && numberConfigProvider.isOnLoading()){
+      isOnLoading = true;
+      numberConfigProvider.init(numberProvider.minTurn, numberProvider.maxTurn);
+    }
 
     return Scaffold(
-      body: numberConfigProvider.isOnLoading()
+      body: isOnLoading
           ? const Center(
               child: CircularProgressIndicator(),
             )
@@ -92,10 +99,10 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
                             width: 15,
                           ),
                           DropdownButton(
-                            value: numberProvider.minTurn,
+                            value: numberConfigProvider.getValue(ConfigKind.minTurn),
                             items: numberProvider.turnList,
                             onChanged: (value) {
-                              numberProvider.minTurn = value as int;
+                              numberConfigProvider.setValue(ConfigKind.minTurn, value as int);
                             },
                           ),
                           Container(
@@ -106,10 +113,10 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
                             child: Text("~"),
                           ),
                           DropdownButton(
-                            value: numberProvider.maxTurn,
+                            value: numberConfigProvider.getValue(ConfigKind.maxTurn),
                             items: numberProvider.turnList,
                             onChanged: (value) {
-                              numberProvider.maxTurn = value as int;
+                              numberConfigProvider.setValue(ConfigKind.maxTurn, value as int);
                             },
                           ),
                         ],

@@ -27,51 +27,39 @@ class NumberProvider extends ChangeNotifier {
     return 50.0;
   }
 
-  late List<LotteryTurnModel> _modelList = [];
+  late List<LotteryTurnModel> _turnModelList = [];
 
   Future<void> init() async {
-    try{
-      _modelList = await _turnDB.get();
-      //_modelList = await LotteryRepository.getModelList();
-    }
-    catch(e){
+    try {
+      _turnModelList = await _turnDB.get();
+      //_turnModelList = await LotteryRepository.getModelList();
+    } catch (e) {
       print(e);
     }
 
     notifyListeners();
 
-    maxTurn = _modelList.length;
-
-    for(int i = 1; i <= _modelList.length; ++i) {
+    for (int i = 1; i <= _turnModelList.length; ++i) {
       _turnList.add(DropdownMenuItem(value: i, child: Text(i.toString())));
     }
   }
-  
+
   final List<DropdownMenuItem> _turnList = [];
 
-  List<DropdownMenuItem> get turnList{
+  bool isOnLoading() {
+    return _turnList.isEmpty;
+  }
+
+  int get minTurn{
+    return 1;
+  }
+
+  int get maxTurn{
+    return isOnLoading() ? 1 : _turnModelList.last.id;
+  }
+
+  List<DropdownMenuItem> get turnList {
     return _turnList;
-  }
-
-  int _minTurn = 1;
-  int _maxTurn = 1;
-
-  int get minTurn {
-    return _minTurn;
-  }
-
-  set minTurn(int value) {
-    _minTurn = value;
-    notifyListeners();
-  }
-
-  int get maxTurn {
-    return _maxTurn;
-  }
-
-  set maxTurn(int value) {
-    _maxTurn = value;
-    notifyListeners();
   }
 
   final List<List<int>> _numberList = [];
@@ -81,15 +69,14 @@ class NumberProvider extends ChangeNotifier {
   }
 
   void generateNumber({required bool overGenerate, int count = 1}) {
-
     int remainedCount = numberListMaxLen - numberList.length;
 
-    if(0 >= remainedCount) {
-      if(false == overGenerate) {
+    if (0 >= remainedCount) {
+      if (false == overGenerate) {
         return;
       }
 
-      for(int i = 0; i < count; ++i) {
+      for (int i = 0; i < count; ++i) {
         _numberList.removeAt(0);
       }
 
@@ -98,7 +85,7 @@ class NumberProvider extends ChangeNotifier {
 
     count = min(count, remainedCount);
 
-    for(int i = 0; i < count; ++i) {
+    for (int i = 0; i < count; ++i) {
       List<int> newNumberList = [];
 
       while (true) {
@@ -121,7 +108,7 @@ class NumberProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void clearNumber(){
+  void clearNumber() {
     _numberList.clear();
 
     notifyListeners();

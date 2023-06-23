@@ -23,18 +23,15 @@ void main() async {
           label: '번호 생성'),
       widget: MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context){
-            var provider = NumberConfigProvider();
-            provider.init();
-            return provider;
-          }
-          ),
-          ChangeNotifierProvider(create: (context){
+          ChangeNotifierProvider(create: (context) {
             var provider = NumberProvider();
             provider.init();
             return provider;
-          }
-          ),
+          }),
+          ChangeNotifierProvider(create: (context) {
+            var provider = NumberConfigProvider();
+            return provider;
+          }),
         ],
         child: const NumberGenerationScreen(),
       ),

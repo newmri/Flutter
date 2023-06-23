@@ -5,6 +5,8 @@ import 'package:lottery/database/config_db.dart';
 enum ConfigKind {
   statics,
   overGenerate,
+  minTurn,
+  maxTurn,
 }
 
 class NumberConfigProvider extends ChangeNotifier {
@@ -12,24 +14,32 @@ class NumberConfigProvider extends ChangeNotifier {
 
   late List<ConfigModel> _configList = [];
 
-  Future<void> init() async {
+  Future<void> init(int minTurn, int maxTurn) async {
+    if (_configList.isNotEmpty) {
+      return;
+    }
 
     _configList = await _configDB.get();
 
     notifyListeners();
 
-    if (_configList.isNotEmpty) {
-      return;
-    }
-
     for (var e in ConfigKind.values) {
-      var config = ConfigModel(id: e.index, value: 0);
-      _configList.add(config);
-      _configDB.insert(config);
+      ConfigModel configModel;
+
+      if (ConfigKind.minTurn == e) {
+        configModel = ConfigModel(id: e.index, value: minTurn);
+      } else if (ConfigKind.maxTurn == e) {
+        configModel = ConfigModel(id: e.index, value: maxTurn);
+      } else {
+        configModel = ConfigModel(id: e.index, value: 0);
+      }
+
+      _configList.add(configModel);
+      _configDB.insert(configModel);
     }
   }
 
-  bool isOnLoading(){
+  bool isOnLoading() {
     return _configList.isEmpty;
   }
 
