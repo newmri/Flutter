@@ -14,10 +14,16 @@ class NumberConfigProvider extends ChangeNotifier {
 
   late List<ConfigModel> _configList = [];
 
+  late int _minTurn;
+  late int _maxTurn;
+
   Future<void> init(int minTurn, int maxTurn) async {
     if (_configList.isNotEmpty) {
       return;
     }
+
+    _minTurn = minTurn;
+    _maxTurn = maxTurn;
 
     _configList = await _configDB.get();
 
@@ -53,5 +59,10 @@ class NumberConfigProvider extends ChangeNotifier {
     notifyListeners();
 
     _configDB.update(_configList[kind.index]);
+  }
+
+  void setTurn({required int recentTurnGap}){
+    setValue(ConfigKind.minTurn, _maxTurn - recentTurnGap);
+    setValue(ConfigKind.maxTurn, _maxTurn);
   }
 }

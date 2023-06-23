@@ -1,4 +1,6 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lottery/provider/number_provider.dart';
 import 'package:lottery/provider/number_config_provider.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +21,14 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
   @override
   bool get wantKeepAlive => true;
 
+  final TextEditingController _textEditingController = TextEditingController();
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     numberProvider = Provider.of<NumberProvider>(context);
@@ -26,7 +36,7 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
 
     bool isOnLoading = numberProvider.isOnLoading();
 
-    if(false == isOnLoading && numberConfigProvider.isOnLoading()){
+    if (false == isOnLoading && numberConfigProvider.isOnLoading()) {
       isOnLoading = true;
       numberConfigProvider.init(numberProvider.minTurn, numberProvider.maxTurn);
     }
@@ -72,7 +82,7 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
                       style: TextStyle(
                         fontSize: 20,
                       ),
-                      '통계 사용',
+                      '통계',
                     ),
                     Switch(
                       value: (1 ==
@@ -93,17 +103,82 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
                             style: TextStyle(
                               fontSize: 20,
                             ),
-                            '회차 선택',
+                            '회차',
                           ),
                           Container(
-                            width: 15,
+                            width: 10,
                           ),
-                          DropdownButton(
-                            value: numberConfigProvider.getValue(ConfigKind.minTurn),
-                            items: numberProvider.turnList,
-                            onChanged: (value) {
-                              numberConfigProvider.setValue(ConfigKind.minTurn, value as int);
-                            },
+                          DropdownButtonHideUnderline(
+                            child: DropdownButton2(
+                              isExpanded: true,
+                              value: numberConfigProvider
+                                  .getValue(ConfigKind.minTurn),
+                              items: numberProvider.turnList,
+                              onChanged: (value) {
+                                numberConfigProvider.setValue(
+                                    ConfigKind.minTurn, value as int);
+                              },
+                              buttonStyleData: const ButtonStyleData(
+                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                height: 40,
+                                width: 80,
+                              ),
+                              dropdownStyleData: DropdownStyleData(
+                                scrollbarTheme: ScrollbarThemeData(
+                                  radius: const Radius.circular(40),
+                                  thickness: MaterialStateProperty.all(7),
+                                  thumbVisibility:
+                                      MaterialStateProperty.all(true),
+                                ),
+                              ),
+                              dropdownSearchData: DropdownSearchData(
+                                searchController: _textEditingController,
+                                searchInnerWidgetHeight: 50,
+                                searchInnerWidget: Container(
+                                  height: 50,
+                                  padding: const EdgeInsets.only(
+                                    top: 8,
+                                    bottom: 4,
+                                    right: 8,
+                                    left: 8,
+                                  ),
+                                  child: TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp('[0-9]'))
+                                    ],
+                                    expands: true,
+                                    maxLines: null,
+                                    controller: _textEditingController,
+                                    decoration: InputDecoration(
+                                      isDense: true,
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 8,
+                                      ),
+                                      hintText: '검색',
+                                      hintStyle: const TextStyle(fontSize: 12),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                searchMatchFn: (item, searchValue) {
+                                  return item.value
+                                      .toString()
+                                      .contains(searchValue);
+                                },
+                              ),
+                              //This to clear the search value when you close the menu
+                              onMenuStateChange: (isOpen) {
+                                if (!isOpen) {
+                                  _textEditingController.clear();
+                                }
+                              },
+                            ),
                           ),
                           Container(
                             width: 15,
@@ -112,12 +187,104 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
                             width: 30,
                             child: Text("~"),
                           ),
-                          DropdownButton(
-                            value: numberConfigProvider.getValue(ConfigKind.maxTurn),
-                            items: numberProvider.turnList,
-                            onChanged: (value) {
-                              numberConfigProvider.setValue(ConfigKind.maxTurn, value as int);
+                          DropdownButtonHideUnderline(
+                            child: DropdownButton2(
+                              isExpanded: true,
+                              value: numberConfigProvider
+                                  .getValue(ConfigKind.maxTurn),
+                              items: numberProvider.turnList,
+                              onChanged: (value) {
+                                numberConfigProvider.setValue(
+                                    ConfigKind.maxTurn, value as int);
+                              },
+                              buttonStyleData: const ButtonStyleData(
+                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                height: 40,
+                                width: 80,
+                              ),
+                              dropdownStyleData: DropdownStyleData(
+                                scrollbarTheme: ScrollbarThemeData(
+                                  radius: const Radius.circular(40),
+                                  thickness: MaterialStateProperty.all(7),
+                                  thumbVisibility:
+                                      MaterialStateProperty.all(true),
+                                ),
+                              ),
+                              dropdownSearchData: DropdownSearchData(
+                                searchController: _textEditingController,
+                                searchInnerWidgetHeight: 50,
+                                searchInnerWidget: Container(
+                                  height: 50,
+                                  padding: const EdgeInsets.only(
+                                    top: 8,
+                                    bottom: 4,
+                                    right: 8,
+                                    left: 8,
+                                  ),
+                                  child: TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp('[0-9]'))
+                                    ],
+                                    expands: true,
+                                    maxLines: null,
+                                    controller: _textEditingController,
+                                    decoration: InputDecoration(
+                                      isDense: true,
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 8,
+                                      ),
+                                      hintText: '검색',
+                                      hintStyle: const TextStyle(fontSize: 12),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                searchMatchFn: (item, searchValue) {
+                                  return item.value
+                                      .toString()
+                                      .contains(searchValue);
+                                },
+                              ),
+                              //This to clear the search value when you close the menu
+                              onMenuStateChange: (isOpen) {
+                                if (!isOpen) {
+                                  _textEditingController.clear();
+                                }
+                              },
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              numberConfigProvider.setTurn(recentTurnGap: 4);
                             },
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              )),
+                            ),
+                            child: const Text("한달"),
+                          ),
+                          Container(
+                            width: 5,
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              numberConfigProvider.setTurn(recentTurnGap: 4 * 12);
+                            },
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              )),
+                            ),
+                            child: const Text("일년"),
                           ),
                         ],
                       )
@@ -155,7 +322,6 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
                             shape: MaterialStateProperty.all<
                                 RoundedRectangleBorder>(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
-                              //side: BorderSide(color: Colors.red) // border line color
                             )),
                           ),
                           child: const Text("번호 1개 생성"),
@@ -173,7 +339,6 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
                             shape: MaterialStateProperty.all<
                                 RoundedRectangleBorder>(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
-                              //side: BorderSide(color: Colors.red) // border line color
                             )),
                           ),
                           child: const Text("번호 5개 생성"),
@@ -186,7 +351,6 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
                             shape: MaterialStateProperty.all<
                                 RoundedRectangleBorder>(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
-                              //side: BorderSide(color: Colors.red) // border line color
                             )),
                           ),
                           child: const Text("번호 초기화"),
