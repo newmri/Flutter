@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:lottery/model/lottery_turn_model.dart';
 import 'package:lottery/repository/lottery_repository.dart';
 import 'package:lottery/database/turn_db.dart';
+import 'package:lottery/model/simple_turn_model.dart';
+
 
 int numberMaxLen = 6;
 int numberMax = 45;
@@ -68,7 +70,7 @@ class NumberProvider extends ChangeNotifier {
     return _numberList;
   }
 
-  void generateNumber({required bool overGenerate, int count = 1}) {
+  void generateNumber({required bool overGenerate, required int count, required SimpleTurnModel? turnModel}) {
     int remainedCount = numberListMaxLen - numberList.length;
 
     if (0 >= remainedCount) {
