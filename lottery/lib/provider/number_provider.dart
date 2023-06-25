@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lottery/model/lottery_turn_model.dart';
 import 'package:lottery/repository/lottery_repository.dart';
 import 'package:lottery/database/turn_db.dart';
-import 'package:lottery/model/simple_turn_model.dart';
+import 'package:lottery/model/number_count_model.dart';
 
 int numberMaxLen = 6;
 int numberMax = 45;
@@ -34,7 +34,8 @@ class NumberProvider extends ChangeNotifier {
     try {
       _turnModelList = await _turnDB.get();
 
-      var newTurnModelList = await LotteryRepository.getModelList(minTurn: _turnModelList.length);
+      var newTurnModelList =
+          await LotteryRepository.getModelList(minTurn: _turnModelList.length);
 
       if (newTurnModelList.isNotEmpty) {
         for (var element in newTurnModelList) {
@@ -81,7 +82,7 @@ class NumberProvider extends ChangeNotifier {
   void generateNumber(
       {required bool overGenerate,
       required int count,
-      required SimpleTurnModel? turnModel}) {
+      required bool useStatics}) {
     int remainedCount = numberListMaxLen - numberList.length;
 
     if (0 >= remainedCount) {
@@ -102,7 +103,7 @@ class NumberProvider extends ChangeNotifier {
       List<int> newNumberList = [];
 
       while (true) {
-        var number = Random().nextInt(numberMax) + 1;
+        var number = _generateNumber(useStatics: useStatics);
 
         if (!newNumberList.contains(number)) {
           newNumberList.add(number);
@@ -119,6 +120,37 @@ class NumberProvider extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  final List<NumberCountModel> _countList =
+      List.generate(numberMax, (index) => NumberCountModel(number: index + 1));
+
+  void sortCountList({required int minTurn, required int maxTurn}) {
+    for (var element in _countList) {
+      element.count = 0;
+    }
+
+    for (int i = minTurn; i <= maxTurn; ++i) {
+      for (int j = 0; j < numberMaxLen; ++j) {
+        _countList[_turnModelList[i - 1].value.numberList[j] - 1].count += 1;
+      }
+    }
+
+    _countList.sort((a, b) => b.count.compareTo(a.count));
+  }
+
+  final int staticsTop = 10;
+
+  int _generateNumber({required bool useStatics}) {
+    int number = 0;
+
+    if (useStatics) {
+      number = _countList[Random().nextInt(staticsTop)].number;
+    } else {
+      number = Random().nextInt(numberMax) + 1;
+    }
+
+    return number;
   }
 
   void clearNumber() {

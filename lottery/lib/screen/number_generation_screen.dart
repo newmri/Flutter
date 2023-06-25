@@ -5,7 +5,6 @@ import 'package:lottery/provider/number_provider.dart';
 import 'package:lottery/provider/number_config_provider.dart';
 import 'package:provider/provider.dart';
 import '../component/number_list_container.dart';
-import 'package:lottery/model/simple_turn_model.dart';
 
 class NumberGenerationScreen extends StatefulWidget {
   const NumberGenerationScreen({Key? key}) : super(key: key);
@@ -39,7 +38,7 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
 
     if (false == isOnLoading && numberConfigProvider.isOnLoading()) {
       isOnLoading = true;
-      numberConfigProvider.init(numberProvider.minTurn, numberProvider.maxTurn);
+      numberConfigProvider.init(numberProvider);
     }
 
     return Scaffold(
@@ -118,6 +117,13 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
                               onChanged: (value) {
                                 numberConfigProvider.setValue(
                                     ConfigKind.minTurn, value as int);
+
+                                numberProvider.sortCountList(
+                                  minTurn: numberConfigProvider
+                                      .getValue(ConfigKind.minTurn),
+                                  maxTurn: numberConfigProvider
+                                      .getValue(ConfigKind.maxTurn),
+                                );
                               },
                               buttonStyleData: const ButtonStyleData(
                                 padding: EdgeInsets.symmetric(horizontal: 8),
@@ -197,6 +203,13 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
                               onChanged: (value) {
                                 numberConfigProvider.setValue(
                                     ConfigKind.maxTurn, value as int);
+
+                                numberProvider.sortCountList(
+                                  minTurn: numberConfigProvider
+                                      .getValue(ConfigKind.minTurn),
+                                  maxTurn: numberConfigProvider
+                                      .getValue(ConfigKind.maxTurn),
+                                );
                               },
                               buttonStyleData: const ButtonStyleData(
                                 padding: EdgeInsets.symmetric(horizontal: 8),
@@ -263,6 +276,13 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
                           ElevatedButton(
                             onPressed: () {
                               numberConfigProvider.setTurn(recentTurnGap: 4);
+
+                              numberProvider.sortCountList(
+                                minTurn: numberConfigProvider
+                                    .getValue(ConfigKind.minTurn),
+                                maxTurn: numberConfigProvider
+                                    .getValue(ConfigKind.maxTurn),
+                              );
                             },
                             style: ButtonStyle(
                               shape: MaterialStateProperty.all<
@@ -280,6 +300,13 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
                             onPressed: () {
                               numberConfigProvider.setTurn(
                                   recentTurnGap: 4 * 12);
+
+                              numberProvider.sortCountList(
+                                minTurn: numberConfigProvider
+                                    .getValue(ConfigKind.minTurn),
+                                maxTurn: numberConfigProvider
+                                    .getValue(ConfigKind.maxTurn),
+                              );
                             },
                             style: ButtonStyle(
                               shape: MaterialStateProperty.all<
@@ -322,16 +349,9 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
                                   numberConfigProvider
                                       .getValue(ConfigKind.overGenerate)),
                               count: 1,
-                              turnModel: 0 ==
-                                      numberConfigProvider
-                                          .getValue(ConfigKind.statics)
-                                  ? null
-                                  : SimpleTurnModel(
-                                      minTurn: numberConfigProvider
-                                          .getValue(ConfigKind.minTurn),
-                                      maxTurn: numberConfigProvider
-                                          .getValue(ConfigKind.maxTurn),
-                                    ),
+                              useStatics: 1 ==
+                                  numberConfigProvider
+                                      .getValue(ConfigKind.statics),
                             );
                           },
                           style: ButtonStyle(
@@ -349,16 +369,9 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
                                   numberConfigProvider
                                       .getValue(ConfigKind.overGenerate)),
                               count: 5,
-                              turnModel: 0 ==
-                                      numberConfigProvider
-                                          .getValue(ConfigKind.statics)
-                                  ? null
-                                  : SimpleTurnModel(
-                                      minTurn: numberConfigProvider
-                                          .getValue(ConfigKind.minTurn),
-                                      maxTurn: numberConfigProvider
-                                          .getValue(ConfigKind.maxTurn),
-                                    ),
+                              useStatics: 1 ==
+                                  numberConfigProvider
+                                      .getValue(ConfigKind.statics),
                             );
                           },
                           style: ButtonStyle(

@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:lottery/model/config_model.dart';
 import 'package:lottery/database/config_db.dart';
 
+import 'number_provider.dart';
+
 enum ConfigKind {
   statics,
   overGenerate,
@@ -17,19 +19,23 @@ class NumberConfigProvider extends ChangeNotifier {
   late int _minTurn;
   late int _maxTurn;
 
-  Future<void> init(int minTurn, int maxTurn) async {
+  Future<void> init(NumberProvider numberProvider) async {
     if (_configList.isNotEmpty) {
       return;
     }
 
-    _minTurn = minTurn;
-    _maxTurn = maxTurn;
+    _minTurn = numberProvider.minTurn;
+    _maxTurn = numberProvider.maxTurn;
 
     _configList = await _configDB.get();
 
     notifyListeners();
 
-    if(_configList.isNotEmpty){
+    if (_configList.isNotEmpty) {
+      numberProvider.sortCountList(
+        minTurn: getValue(ConfigKind.minTurn),
+        maxTurn: getValue(ConfigKind.maxTurn),
+      );
       return;
     }
 
@@ -37,9 +43,9 @@ class NumberConfigProvider extends ChangeNotifier {
       ConfigModel configModel;
 
       if (ConfigKind.minTurn == e) {
-        configModel = ConfigModel(id: e.index, value: minTurn);
+        configModel = ConfigModel(id: e.index, value: _minTurn);
       } else if (ConfigKind.maxTurn == e) {
-        configModel = ConfigModel(id: e.index, value: maxTurn);
+        configModel = ConfigModel(id: e.index, value: _maxTurn);
       } else {
         configModel = ConfigModel(id: e.index, value: 0);
       }
@@ -47,6 +53,11 @@ class NumberConfigProvider extends ChangeNotifier {
       _configList.add(configModel);
       _configDB.insert(configModel);
     }
+
+    numberProvider.sortCountList(
+      minTurn: getValue(ConfigKind.minTurn),
+      maxTurn: getValue(ConfigKind.maxTurn),
+    );
   }
 
   bool isOnLoading() {
@@ -65,7 +76,7 @@ class NumberConfigProvider extends ChangeNotifier {
     _configDB.update(_configList[kind.index]);
   }
 
-  void setTurn({required int recentTurnGap}){
+  void setTurn({required int recentTurnGap}) {
     setValue(ConfigKind.minTurn, _maxTurn - recentTurnGap);
     setValue(ConfigKind.maxTurn, _maxTurn);
   }
