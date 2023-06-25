@@ -29,6 +29,10 @@ class NumberConfigProvider extends ChangeNotifier {
 
     notifyListeners();
 
+    if(_configList.isNotEmpty){
+      return;
+    }
+
     for (var e in ConfigKind.values) {
       ConfigModel configModel;
 
