@@ -18,9 +18,16 @@ class LotteryTurnModel {
   }
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'id': id,
-      'number': value,
-    };
+    Map<String, dynamic> mapList = {};
+
+    mapList['turn'] = id;
+
+    for (int i = 1; i <= numberMaxLen; ++i) {
+      mapList['number_$i'] = value.numberList[i - 1];
+    }
+
+    mapList['bonus'] = value.numberList.last;
+
+    return mapList;
   }
 }

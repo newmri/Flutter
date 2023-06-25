@@ -6,7 +6,6 @@ import 'package:lottery/repository/lottery_repository.dart';
 import 'package:lottery/database/turn_db.dart';
 import 'package:lottery/model/simple_turn_model.dart';
 
-
 int numberMaxLen = 6;
 int numberMax = 45;
 
@@ -34,7 +33,16 @@ class NumberProvider extends ChangeNotifier {
   Future<void> init() async {
     try {
       _turnModelList = await _turnDB.get();
-      //_turnModelList = await LotteryRepository.getModelList();
+
+      var newTurnModelList = await LotteryRepository.getModelList(minTurn: _turnModelList.length);
+
+      if (newTurnModelList.isNotEmpty) {
+        for (var element in newTurnModelList) {
+          _turnDB.insert(element);
+        }
+
+        _turnModelList.addAll(newTurnModelList);
+      }
     } catch (e) {
       print(e);
     }
@@ -52,11 +60,11 @@ class NumberProvider extends ChangeNotifier {
     return _turnList.isEmpty;
   }
 
-  int get minTurn{
+  int get minTurn {
     return 1;
   }
 
-  int get maxTurn{
+  int get maxTurn {
     return isOnLoading() ? 1 : _turnModelList.last.id;
   }
 
@@ -70,7 +78,10 @@ class NumberProvider extends ChangeNotifier {
     return _numberList;
   }
 
-  void generateNumber({required bool overGenerate, required int count, required SimpleTurnModel? turnModel}) {
+  void generateNumber(
+      {required bool overGenerate,
+      required int count,
+      required SimpleTurnModel? turnModel}) {
     int remainedCount = numberListMaxLen - numberList.length;
 
     if (0 >= remainedCount) {

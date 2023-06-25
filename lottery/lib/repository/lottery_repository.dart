@@ -6,7 +6,7 @@ import 'package:lottery/provider/number_provider.dart';
 import '../model/lottery_model.dart';
 
 class LotteryRepository {
-  static Future<List<LotteryTurnModel>> getModelList({int minTurn = 1}) async {
+  static Future<List<LotteryTurnModel>> getModelList({required int minTurn}) async {
     List<LotteryTurnModel> modelList = [];
 
     int diffDays =
@@ -15,6 +15,12 @@ class LotteryRepository {
             .inDays;
 
     int maxTurn = diffDays ~/ 7 + 1;
+
+    if(minTurn == maxTurn){
+      return modelList;
+    }
+
+    minTurn += 1;
 
     for (int i = minTurn; i <= maxTurn; ++i) {
       var url = Uri.parse(
@@ -37,6 +43,8 @@ class LotteryRepository {
       for (int j = 1; j <= numberMaxLen; ++j) {
         model.addNumber(list["drwtNo$j"]);
       }
+
+      model.addNumber(list["bnusNo"]);
 
       LotteryTurnModel turnModel = LotteryTurnModel(id: i, value: model);
 
