@@ -24,6 +24,7 @@ class NumberListContainer extends StatelessWidget {
     }
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: numberListWidget,
     );
   }

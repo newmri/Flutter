@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
+var bannerAdSize = AdSize.fullBanner;
+
 class BannerAdWidget extends StatefulWidget {
   const BannerAdWidget({Key? key}) : super(key: key);
 
@@ -21,7 +23,7 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
         : 'ca-app-pub-3940256099942544/2934735716';
 
     banner = BannerAd(
-      size: AdSize.fullBanner,
+      size: bannerAdSize,
       adUnitId: adUnitID,
       listener: BannerAdListener(onAdFailedToLoad: (ad, error) {
         ad.dispose();

@@ -21,11 +21,11 @@ class NumberProvider extends ChangeNotifier {
   }
 
   double get numberWidth {
-    return 50.0;
+    return 55.0;
   }
 
   double get numberHeight {
-    return 50.0;
+    return 60.0;
   }
 
   late List<LotteryTurnModel> _turnModelList = [];

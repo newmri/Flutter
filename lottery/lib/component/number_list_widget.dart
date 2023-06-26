@@ -20,8 +20,8 @@ class NumberListWidget extends StatelessWidget {
     if(0 != count) {
       itemList.add(
         Text(
-          style: const TextStyle(fontSize: 25, letterSpacing: 1),
-          "$count. ",
+          style: const TextStyle(fontSize: 30, letterSpacing: 0),
+          "$count.",
         ),
       );
     }
@@ -35,6 +35,10 @@ class NumberListWidget extends StatelessWidget {
         ))
         .toList());
 
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: itemList);
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: itemList,
+    );
   }
 }

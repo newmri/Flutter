@@ -23,10 +23,13 @@ class NumberWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SizedBox(
+        width: double.infinity,
+        height: double.infinity,
         child: CircleAvatar(
           backgroundColor: color,
           child: Text(
               style: const TextStyle(
+                fontSize: 30,
                 color: Color(0xFFFFF5CB),
               ),
               number.toString()),
