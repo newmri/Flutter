@@ -3,6 +3,7 @@ import 'package:lottery/screen/root_screen.dart';
 import 'package:lottery/const/colors.dart';
 import 'package:lottery/model/BottomNavigationBarModel.dart';
 import 'package:lottery/screen/number_generation_screen.dart';
+import 'package:lottery/screen/purchase_simulation_screen.dart';
 import 'package:lottery/screen/qr_code_screen.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lottery/provider/number_config_provider.dart';
@@ -14,6 +15,11 @@ void main() async {
 
   MobileAds.instance.initialize();
 
+  var numberProvider = NumberProvider();
+  numberProvider.init();
+
+  var numberConfigProvider = NumberConfigProvider();
+
   List<BottomNavigationBarModel> itemList = [
     BottomNavigationBarModel(
       bar: const BottomNavigationBarItem(
@@ -24,16 +30,28 @@ void main() async {
       widget: MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) {
-            var provider = NumberProvider();
-            provider.init();
-            return provider;
+            return numberProvider;
           }),
           ChangeNotifierProvider(create: (context) {
-            var provider = NumberConfigProvider();
-            return provider;
+            return numberConfigProvider;
           }),
         ],
         child: const NumberGenerationScreen(),
+      ),
+    ),
+    BottomNavigationBarModel(
+      bar: const BottomNavigationBarItem(
+          icon: Icon(
+            Icons.shop_outlined,
+          ),
+          label: '가상 구매'),
+      widget: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) {
+            return numberConfigProvider;
+          }),
+        ],
+        child: const PurchaseSimulationScreen(),
       ),
     ),
     BottomNavigationBarModel(

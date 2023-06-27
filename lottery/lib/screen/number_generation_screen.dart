@@ -187,8 +187,7 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
                               child: TextFormField(
                                 keyboardType: TextInputType.number,
                                 inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp('[0-9]'))
+                                  FilteringTextInputFormatter.digitsOnly,
                                 ],
                                 expands: true,
                                 maxLines: null,
@@ -271,8 +270,7 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
                               child: TextFormField(
                                 keyboardType: TextInputType.number,
                                 inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp('[0-9]'))
+                                  FilteringTextInputFormatter.digitsOnly,
                                 ],
                                 expands: true,
                                 maxLines: null,
