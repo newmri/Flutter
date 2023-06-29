@@ -15,6 +15,7 @@ class NumberGenerationScreen extends StatefulWidget {
 
 class _NumberGenerationScreenState extends State<NumberGenerationScreen>
     with AutomaticKeepAliveClientMixin {
+
   late NumberConfigProvider numberConfigProvider;
   late NumberProvider numberProvider;
 
@@ -24,18 +25,20 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
   @override
   bool get wantKeepAlive => true;
 
-  final TextEditingController _textEditingController = TextEditingController();
+  final TextEditingController _staticsMinTurnController = TextEditingController();
+  final TextEditingController _staticsMaxTurnController = TextEditingController();
 
   @override
   void dispose() {
-    _textEditingController.dispose();
+    _staticsMaxTurnController.dispose();
+    _staticsMinTurnController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    numberProvider = Provider.of<NumberProvider>(context);
     numberConfigProvider = Provider.of<NumberConfigProvider>(context);
+    numberProvider = Provider.of<NumberProvider>(context);
 
     bool isOnLoading = numberProvider.isOnLoading();
 
@@ -174,7 +177,7 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
                             ),
                           ),
                           dropdownSearchData: DropdownSearchData(
-                            searchController: _textEditingController,
+                            searchController: _staticsMinTurnController,
                             searchInnerWidgetHeight: 50,
                             searchInnerWidget: Container(
                               height: 50,
@@ -191,7 +194,7 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
                                 ],
                                 expands: true,
                                 maxLines: null,
-                                controller: _textEditingController,
+                                controller: _staticsMinTurnController,
                                 decoration: InputDecoration(
                                   isDense: true,
                                   contentPadding: const EdgeInsets.symmetric(
@@ -215,7 +218,7 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
                           //This to clear the search value when you close the menu
                           onMenuStateChange: (isOpen) {
                             if (!isOpen) {
-                              _textEditingController.clear();
+                              _staticsMinTurnController.clear();
                             }
                           },
                         ),
@@ -257,7 +260,7 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
                             ),
                           ),
                           dropdownSearchData: DropdownSearchData(
-                            searchController: _textEditingController,
+                            searchController: _staticsMaxTurnController,
                             searchInnerWidgetHeight: 50,
                             searchInnerWidget: Container(
                               height: 50,
@@ -274,7 +277,7 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
                                 ],
                                 expands: true,
                                 maxLines: null,
-                                controller: _textEditingController,
+                                controller: _staticsMaxTurnController,
                                 decoration: InputDecoration(
                                   isDense: true,
                                   contentPadding: const EdgeInsets.symmetric(
@@ -298,7 +301,7 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
                           //This to clear the search value when you close the menu
                           onMenuStateChange: (isOpen) {
                             if (!isOpen) {
-                              _textEditingController.clear();
+                              _staticsMaxTurnController.clear();
                             }
                           },
                         ),
@@ -380,6 +383,7 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
                       child: const Text(
                         "1개 생성",
                         style: TextStyle(
+                          fontWeight: FontWeight.bold,
                           fontSize: generationButtonFontSize,
                         ),
                       ),
@@ -415,6 +419,7 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
                       child: const Text(
                         "5개 생성",
                         style: TextStyle(
+                          fontWeight: FontWeight.bold,
                           fontSize: generationButtonFontSize,
                         ),
                       ),
@@ -443,6 +448,7 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
                       child: const Text(
                         "초기화",
                         style: TextStyle(
+                          fontWeight: FontWeight.bold,
                           fontSize: generationButtonFontSize,
                         ),
                       ),

@@ -48,6 +48,9 @@ void main() async {
       widget: MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) {
+            return numberProvider;
+          }),
+          ChangeNotifierProvider(create: (context) {
             return numberConfigProvider;
           }),
         ],

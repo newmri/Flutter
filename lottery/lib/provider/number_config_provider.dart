@@ -9,6 +9,8 @@ enum ConfigKind {
   overGenerate,
   minTurn,
   maxTurn,
+  purchaseCount,
+  purchaseTurn,
 }
 
 class NumberConfigProvider extends ChangeNotifier {
@@ -44,7 +46,7 @@ class NumberConfigProvider extends ChangeNotifier {
 
       if (ConfigKind.minTurn == e) {
         configModel = ConfigModel(id: e.index, value: _minTurn);
-      } else if (ConfigKind.maxTurn == e) {
+      } else if (ConfigKind.maxTurn == e || ConfigKind.purchaseTurn == e) {
         configModel = ConfigModel(id: e.index, value: _maxTurn);
       } else {
         configModel = ConfigModel(id: e.index, value: 0);
