@@ -6,17 +6,15 @@ import 'package:provider/provider.dart';
 
 import '../provider/number_provider.dart';
 
-class PurchaseSimulationScreen extends StatefulWidget {
-  const PurchaseSimulationScreen({Key? key}) : super(key: key);
+class NumberPurchaseScreen extends StatefulWidget {
+  const NumberPurchaseScreen({Key? key}) : super(key: key);
 
   @override
-  State<PurchaseSimulationScreen> createState() =>
-      _PurchaseSimulationScreenState();
+  State<NumberPurchaseScreen> createState() => _NumberPurchaseScreenState();
 }
 
-class _PurchaseSimulationScreenState extends State<PurchaseSimulationScreen>
+class _NumberPurchaseScreenState extends State<NumberPurchaseScreen>
     with AutomaticKeepAliveClientMixin {
-
   var _isInitialized = false;
 
   late NumberConfigProvider numberConfigProvider;
@@ -481,7 +479,11 @@ class _PurchaseSimulationScreenState extends State<PurchaseSimulationScreen>
                           ),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        numberProvider.purchase(
+                          numberConfigProvider,
+                        );
+                      },
                       child: const Text(
                         "구매",
                         style: TextStyle(

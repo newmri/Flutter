@@ -3,7 +3,7 @@ import 'package:lottery/screen/root_screen.dart';
 import 'package:lottery/const/colors.dart';
 import 'package:lottery/model/BottomNavigationBarModel.dart';
 import 'package:lottery/screen/number_generation_screen.dart';
-import 'package:lottery/screen/purchase_simulation_screen.dart';
+import 'package:lottery/screen/number_purchase.dart';
 import 'package:lottery/screen/qr_code_screen.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lottery/provider/number_config_provider.dart';
@@ -54,7 +54,7 @@ void main() async {
             return numberConfigProvider;
           }),
         ],
-        child: const PurchaseSimulationScreen(),
+        child: const NumberPurchaseScreen(),
       ),
     ),
     BottomNavigationBarModel(

@@ -1,10 +1,13 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottery/model/lottery_turn_model.dart';
 import 'package:lottery/repository/lottery_repository.dart';
 import 'package:lottery/database/turn_db.dart';
 import 'package:lottery/model/number_count_model.dart';
+
+import 'number_config_provider.dart';
 
 int numberMaxLen = 6;
 int numberMax = 45;
@@ -100,20 +103,7 @@ class NumberProvider extends ChangeNotifier {
     count = min(count, remainedCount);
 
     for (int i = 0; i < count; ++i) {
-      List<int> newNumberList = [];
-
-      while (true) {
-        var number = _generateNumber(useStatics: useStatics);
-
-        if (!newNumberList.contains(number)) {
-          newNumberList.add(number);
-        }
-
-        if (newNumberList.length == numberMaxLen) {
-          break;
-        }
-      }
-
+      List<int> newNumberList = _generateNumbers(useStatics: useStatics);
       newNumberList.sort();
 
       _numberList.add(newNumberList);
@@ -141,6 +131,24 @@ class NumberProvider extends ChangeNotifier {
 
   final int staticsTop = 10;
 
+  List<int> _generateNumbers({required bool useStatics}){
+    List<int> numberList = [];
+
+    while (true) {
+      var number = _generateNumber(useStatics: useStatics);
+
+      if (!numberList.contains(number)) {
+        numberList.add(number);
+      }
+
+      if (numberList.length == numberMaxLen) {
+        break;
+      }
+    }
+
+    return numberList;
+  }
+
   int _generateNumber({required bool useStatics}) {
     int number = 0;
 
@@ -157,5 +165,29 @@ class NumberProvider extends ChangeNotifier {
     _numberList.clear();
 
     notifyListeners();
+  }
+
+  void purchase(NumberConfigProvider numberConfigProvider) {
+    final purchaseCount =
+    numberConfigProvider.getValue(ConfigKind.purchaseCount);
+    if (0 == purchaseCount) {
+      _renderErrorToast("구매 횟수를 정해 주세요.");
+      return;
+    }
+
+    final useStatics = (1 == numberConfigProvider.getValue(ConfigKind.statics));
+
+    for (var i = 0; i < purchaseCount; ++i) {
+      List<int> newNumberList = _generateNumbers(useStatics: useStatics);
+      newNumberList.sort();
+
+    }
+  }
+
+  void _renderErrorToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+    );
   }
 }
