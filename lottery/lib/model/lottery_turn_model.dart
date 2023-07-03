@@ -14,6 +14,8 @@ class LotteryTurnModel {
       value.addNumber(json['number_$i']);
     }
 
+    value.addNumber(json['bonus']);
+
     return LotteryTurnModel(id: json['turn'], value: value);
   }
 

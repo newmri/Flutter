@@ -11,6 +11,7 @@ import 'number_config_provider.dart';
 
 int numberMaxLen = 6;
 int numberMax = 45;
+int rankMax = 6;
 
 class NumberProvider extends ChangeNotifier {
   final TurnDB _turnDB = TurnDB();
@@ -48,7 +49,7 @@ class NumberProvider extends ChangeNotifier {
         _turnModelList.addAll(newTurnModelList);
       }
     } catch (e) {
-      print(e);
+      _renderErrorToast("인터넷 상태를 확인 해 주세요.");
     }
 
     notifyListeners();
@@ -116,13 +117,16 @@ class NumberProvider extends ChangeNotifier {
       List.generate(numberMax, (index) => NumberCountModel(number: index + 1));
 
   void sortCountList({required int minTurn, required int maxTurn}) {
-    for (var element in _countList) {
-      element.count = 0;
+
+    for(int i = 0; i < numberMax; ++i){
+      _countList[i].number = i+1;
+      _countList[i].count = 0;
     }
 
     for (int i = minTurn; i <= maxTurn; ++i) {
       for (int j = 0; j < numberMaxLen; ++j) {
-        _countList[_turnModelList[i - 1].value.numberList[j] - 1].count += 1;
+        int index = (_turnModelList[i - 1].value.numberList[j]) - 1;
+        ++_countList[index].count;
       }
     }
 
@@ -175,13 +179,64 @@ class NumberProvider extends ChangeNotifier {
       return;
     }
 
+    final turnIndex = numberConfigProvider.getValue(ConfigKind.purchaseTurn) - 1;
+
     final useStatics = (1 == numberConfigProvider.getValue(ConfigKind.statics));
 
+    List<int> rankCount = List.filled(rankMax, 0);
+    
     for (var i = 0; i < purchaseCount; ++i) {
       List<int> newNumberList = _generateNumbers(useStatics: useStatics);
       newNumberList.sort();
 
+      int sameNumberCount = 0;
+      bool isSameBonus = false;
+
+      for(var j = 0; j < numberMaxLen; ++j){
+        if(newNumberList[j] == _turnModelList[turnIndex].value.numberList[j]){
+          ++sameNumberCount;
+        }
+        else if(newNumberList[j] == _turnModelList[turnIndex].value.numberList[numberMaxLen]){
+          isSameBonus = true;
+        }
+      }
+
+      int rank = _getRank(sameNumberCount, isSameBonus);
+      rankCount[rank - 1] += 1;
     }
+
+    for(int i = 0; i < rankCount.length; ++i){
+      print("${i+1}등: ${rankCount[i]}");
+    }
+  }
+
+  int _getRank(int sameNumberCount, bool isSameBonus){
+    int rank = 0;
+
+    switch(sameNumberCount){
+      case 6:
+        rank = 1;
+        break;
+      case 5:
+        if(isSameBonus){
+          rank = 2;
+        }
+        else{
+          rank = 3;
+        }
+        break;
+      case 4:
+        rank = 4;
+        break;
+      case 3:
+        rank = 5;
+        break;
+      default:
+        rank = 6;
+        break;
+    }
+
+    return rank;
   }
 
   void _renderErrorToast(String message) {
