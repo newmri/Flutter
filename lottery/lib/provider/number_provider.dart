@@ -171,6 +171,16 @@ class NumberProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<String> _purchaseResult = [];
+
+  int get purchaseResultLen {
+    return _purchaseResult.length;
+  }
+
+  List<String> get purchaseResult {
+    return _purchaseResult;
+  }
+
   void purchase(NumberConfigProvider numberConfigProvider) {
     final purchaseCount =
     numberConfigProvider.getValue(ConfigKind.purchaseCount);
@@ -184,7 +194,9 @@ class NumberProvider extends ChangeNotifier {
     final useStatics = (1 == numberConfigProvider.getValue(ConfigKind.statics));
 
     List<int> rankCount = List.filled(rankMax, 0);
-    
+
+    _purchaseResult.clear();
+
     for (var i = 0; i < purchaseCount; ++i) {
       List<int> newNumberList = _generateNumbers(useStatics: useStatics);
       newNumberList.sort();
@@ -206,8 +218,11 @@ class NumberProvider extends ChangeNotifier {
     }
 
     for(int i = 0; i < rankCount.length; ++i){
-      print("${i+1}등: ${rankCount[i]}");
+      var ratio = (rankCount[i] / purchaseCount) * 100;
+      _purchaseResult.add("${i+1}등: ${rankCount[i]}회 당첨 (당첨률: ${ratio.toStringAsFixed(2)}%)");
     }
+
+    notifyListeners();
   }
 
   int _getRank(int sameNumberCount, bool isSameBonus){

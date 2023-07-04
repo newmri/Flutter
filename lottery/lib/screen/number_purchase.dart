@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:lottery/provider/number_config_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../component/number_purchase_container.dart';
 import '../provider/number_provider.dart';
 
 class NumberPurchaseScreen extends StatefulWidget {
@@ -89,10 +90,30 @@ class _NumberPurchaseScreenState extends State<NumberPurchaseScreen>
                 Container(
                   height: 20,
                 ),
+                renderResult(),
                 renderBottom(),
               ],
             ),
     );
+  }
+
+  Container renderResult() {
+    return numberProvider.purchaseResultLen > 0
+        ? Container(
+      margin: const EdgeInsets.only(
+          left: 0.0, top: 0.0, right: 0.0, bottom: 0.0),
+      padding: const EdgeInsets.only(
+        left: 10.0,
+        top: 10.0,
+        bottom: 10.0,
+        right: 0.0,
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(),
+      ),
+      child: NumberPurchaseResultContainer(),
+    )
+        : Container();
   }
 
   Expanded renderBottom() {
