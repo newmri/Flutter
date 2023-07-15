@@ -29,7 +29,7 @@ class NumberWidget extends StatelessWidget {
           backgroundColor: color,
           child: Text(
               style: const TextStyle(
-                fontSize: 30,
+                fontSize: 20,
                 color: Color(0xFFFFF5CB),
               ),
               number.toString()),

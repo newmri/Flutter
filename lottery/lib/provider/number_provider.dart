@@ -25,11 +25,11 @@ class NumberProvider extends ChangeNotifier {
   }
 
   double get numberWidth {
-    return 55.0;
+    return 45.0;
   }
 
   double get numberHeight {
-    return 60.0;
+    return 55.0;
   }
 
   late List<LotteryTurnModel> _turnModelList = [];
@@ -219,7 +219,7 @@ class NumberProvider extends ChangeNotifier {
 
     for(int i = 0; i < rankCount.length; ++i){
       var ratio = (rankCount[i] / purchaseCount) * 100;
-      _purchaseResult.add("${i+1}등: ${rankCount[i]}회 당첨 (당첨률: ${ratio.toStringAsFixed(2)}%)");
+      _purchaseResult.add("${i+1}등: ${rankCount[i]} (${ratio.toStringAsFixed(2)}%)");
     }
 
     notifyListeners();

@@ -19,7 +19,7 @@ class NumberPurchaseResultContainer extends StatelessWidget {
       resultList.add(
         Text(
           style: const TextStyle(
-            fontSize: 22,
+            fontSize: 25,
           ),
           element,
         ),

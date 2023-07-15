@@ -15,7 +15,6 @@ class NumberGenerationScreen extends StatefulWidget {
 
 class _NumberGenerationScreenState extends State<NumberGenerationScreen>
     with AutomaticKeepAliveClientMixin {
-
   late NumberConfigProvider numberConfigProvider;
   late NumberProvider numberProvider;
 
@@ -25,8 +24,10 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
   @override
   bool get wantKeepAlive => true;
 
-  final TextEditingController _staticsMinTurnController = TextEditingController();
-  final TextEditingController _staticsMaxTurnController = TextEditingController();
+  final TextEditingController _staticsMinTurnController =
+      TextEditingController();
+  final TextEditingController _staticsMaxTurnController =
+      TextEditingController();
 
   @override
   void dispose() {
@@ -53,13 +54,21 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
               child: CircularProgressIndicator(),
             )
           : Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Container(
-                  height: 20,
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                    ),
+                    child: Column(
+                      children: [
+                        // Content widgets
+                        Container(height: 20),
+                        renderNumbers(),
+                      ],
+                    ),
+                  ),
                 ),
-                renderNumbers(),
                 renderBottom(),
               ],
             ),
@@ -70,11 +79,11 @@ class _NumberGenerationScreenState extends State<NumberGenerationScreen>
     return numberProvider.numberLen > 0
         ? Container(
             margin: const EdgeInsets.only(
-                left: 0.0, top: 0.0, right: 0.0, bottom: 0.0),
+                left: 10.0, top: 10.0, right: 10.0, bottom: 10.0),
             padding: const EdgeInsets.only(
               left: 0.0,
-              top: 10.0,
-              bottom: 10.0,
+              top: 0.0,
+              bottom: 0.0,
               right: 0.0,
             ),
             decoration: BoxDecoration(

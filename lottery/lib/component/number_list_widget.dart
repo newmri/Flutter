@@ -20,7 +20,7 @@ class NumberListWidget extends StatelessWidget {
     if(0 != count) {
       itemList.add(
         Text(
-          style: const TextStyle(fontSize: 30, letterSpacing: 0),
+          style: const TextStyle(fontSize: 25, letterSpacing: 0),
           "$count.",
         ),
       );
