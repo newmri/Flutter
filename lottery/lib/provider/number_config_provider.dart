@@ -5,8 +5,9 @@ import 'package:lottery/database/config_db.dart';
 import 'number_provider.dart';
 
 enum ConfigKind {
-  statics,
   overGenerate,
+  statics,
+  staticsTop,
   minTurn,
   maxTurn,
   purchaseCount,
@@ -81,5 +82,11 @@ class NumberConfigProvider extends ChangeNotifier {
   void setTurn({required int recentTurnGap}) {
     setValue(ConfigKind.minTurn, _maxTurn - recentTurnGap);
     setValue(ConfigKind.maxTurn, _maxTurn);
+  }
+
+  int getStaticsTop(){
+    final useStatics = (1 == getValue(ConfigKind.statics));
+
+    return useStatics ? getValue(ConfigKind.staticsTop) : 0;
   }
 }

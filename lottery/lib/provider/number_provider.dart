@@ -9,9 +9,9 @@ import 'package:lottery/model/number_count_model.dart';
 
 import 'number_config_provider.dart';
 
-int numberMaxLen = 6;
-int numberMax = 45;
-int rankMax = 6;
+const int numberMaxLen = 6;
+const int numberMax = 45;
+const int rankMax = 6;
 
 class NumberProvider extends ChangeNotifier {
   final TurnDB _turnDB = TurnDB();
@@ -86,7 +86,7 @@ class NumberProvider extends ChangeNotifier {
   void generateNumber(
       {required bool overGenerate,
       required int count,
-      required bool useStatics}) {
+      required int staticsTop}) {
     int remainedCount = numberListMaxLen - numberList.length;
 
     if (0 >= remainedCount) {
@@ -104,7 +104,7 @@ class NumberProvider extends ChangeNotifier {
     count = min(count, remainedCount);
 
     for (int i = 0; i < count; ++i) {
-      List<int> newNumberList = _generateNumbers(useStatics: useStatics);
+      List<int> newNumberList = _generateNumbers(staticsTop: staticsTop);
       newNumberList.sort();
 
       _numberList.add(newNumberList);
@@ -133,13 +133,11 @@ class NumberProvider extends ChangeNotifier {
     _countList.sort((a, b) => b.count.compareTo(a.count));
   }
 
-  final int staticsTop = 10;
-
-  List<int> _generateNumbers({required bool useStatics}){
+  List<int> _generateNumbers({required int staticsTop}){
     List<int> numberList = [];
 
     while (true) {
-      var number = _generateNumber(useStatics: useStatics);
+      var number = _generateNumber(staticsTop: staticsTop);
 
       if (!numberList.contains(number)) {
         numberList.add(number);
@@ -153,10 +151,10 @@ class NumberProvider extends ChangeNotifier {
     return numberList;
   }
 
-  int _generateNumber({required bool useStatics}) {
+  int _generateNumber({required int staticsTop}) {
     int number = 0;
 
-    if (useStatics) {
+    if (0 != staticsTop) {
       number = _countList[Random().nextInt(staticsTop)].number;
     } else {
       number = Random().nextInt(numberMax) + 1;
@@ -191,14 +189,12 @@ class NumberProvider extends ChangeNotifier {
 
     final turnIndex = numberConfigProvider.getValue(ConfigKind.purchaseTurn) - 1;
 
-    final useStatics = (1 == numberConfigProvider.getValue(ConfigKind.statics));
-
     List<int> rankCount = List.filled(rankMax, 0);
 
     _purchaseResult.clear();
 
     for (var i = 0; i < purchaseCount; ++i) {
-      List<int> newNumberList = _generateNumbers(useStatics: useStatics);
+      List<int> newNumberList = _generateNumbers(staticsTop: numberConfigProvider.getStaticsTop());
       newNumberList.sort();
 
       int sameNumberCount = 0;
