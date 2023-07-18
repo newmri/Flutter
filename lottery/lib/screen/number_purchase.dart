@@ -294,7 +294,9 @@ class _NumberPurchaseScreenState extends State<NumberPurchaseScreen>
                       ),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    renderPurchaseHistory(context);
+                  },
                   child: const Text(
                     "과거 기록",
                     style: TextStyle(
@@ -309,5 +311,30 @@ class _NumberPurchaseScreenState extends State<NumberPurchaseScreen>
         ),
       ],
     );
+  }
+
+  Future<dynamic> renderPurchaseHistory(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("가상 구매 과거 기록"),
+            content: const SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                ],
+              ),
+            ),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text("닫기"),
+              ),
+            ],
+          );
+        });
   }
 }
