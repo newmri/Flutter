@@ -114,10 +114,10 @@ class _StaticsWidgetState extends State<StaticsWidget> {
           style: TextStyle(
             fontSize: 20,
           ),
-          '회차',
+          '통계 회차',
         ),
         Container(
-          width: 10,
+          width: 5,
         ),
         DropdownButtonHideUnderline(
           child: DropdownButton2(
@@ -189,11 +189,8 @@ class _StaticsWidgetState extends State<StaticsWidget> {
             },
           ),
         ),
-        Container(
-          width: 15,
-        ),
         const SizedBox(
-          width: 30,
+          width: 10,
           child: Text("~"),
         ),
         DropdownButtonHideUnderline(
@@ -316,7 +313,7 @@ class _StaticsWidgetState extends State<StaticsWidget> {
         ],
         decoration: const InputDecoration(
             border: InputBorder.none,
-            label: Text('반영할 번호 당첨 횟수 순위'),
+            label: Text('반영할 상위 번호 순위'),
             hintText: '$numberMaxLen ~ $numberMax'),
         validator: (value) {
           if (value!.isEmpty) {
