@@ -128,38 +128,6 @@ class _NumberPurchaseScreenState extends State<NumberPurchaseScreen>
         Container(
           height: 20,
         ),
-        TextFormField(
-          controller: _purchaseCountController,
-          keyboardType: TextInputType.number,
-          inputFormatters: [
-            FilteringTextInputFormatter.digitsOnly,
-          ],
-          decoration: const InputDecoration(
-              border: InputBorder.none,
-              label: Text('구매 횟수'),
-              hintText: '$_minPurchaseCount ~ $_maxPurchaseCount'),
-          onChanged: (String value) {
-            var purchaseCount = int.tryParse(value);
-            if (null != purchaseCount) {
-              purchaseCount =
-                  purchaseCount.clamp(_minPurchaseCount, _maxPurchaseCount);
-
-              final text = purchaseCount.toString();
-
-              final selection = TextSelection.collapsed(
-                offset: text.length,
-              );
-
-              numberConfigProvider.setValue(
-                  ConfigKind.purchaseCount, purchaseCount);
-
-              _purchaseCountController.value = TextEditingValue(
-                text: text,
-                selection: selection,
-              );
-            }
-          },
-        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -241,6 +209,38 @@ class _NumberPurchaseScreenState extends State<NumberPurchaseScreen>
           ],
         ),
         staticsWidget,
+        TextFormField(
+          controller: _purchaseCountController,
+          keyboardType: TextInputType.number,
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly,
+          ],
+          decoration: const InputDecoration(
+              border: InputBorder.none,
+              label: Text('구매 횟수'),
+              hintText: '$_minPurchaseCount ~ $_maxPurchaseCount'),
+          onChanged: (String value) {
+            var purchaseCount = int.tryParse(value);
+            if (null != purchaseCount) {
+              purchaseCount =
+                  purchaseCount.clamp(_minPurchaseCount, _maxPurchaseCount);
+
+              final text = purchaseCount.toString();
+
+              final selection = TextSelection.collapsed(
+                offset: text.length,
+              );
+
+              numberConfigProvider.setValue(
+                  ConfigKind.purchaseCount, purchaseCount);
+
+              _purchaseCountController.value = TextEditingValue(
+                text: text,
+                selection: selection,
+              );
+            }
+          },
+        ),
         Row(
           children: [
             Expanded(
